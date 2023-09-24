@@ -11,7 +11,7 @@ import image from "@rollup/plugin-image";
 export default [
   {
     input: {
-      app: "src/server/app.js",
+      index: "src/server/index.js",
       router: "src/server/components/router.js",
     },
     output: {

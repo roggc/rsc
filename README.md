@@ -4,10 +4,10 @@ This is a setup for development with RSC (React Server Components), without SSR 
 
 ## How to install and run the project.
 
-1. **npm i**
-2. **npm run dev**
-3. **npm run app** (in a new terminal window)
-4. enter **localhost:8080** in the browser.
+1. Type **_npm i_** in your terminal (this installs the dependencies and creates the `node_modules` folder)
+2. Then type **_npm run dev_** (this runs rollup in watch mode and creates the `dist` and `public` folders)
+3. In a new terminal window, type **_npm start_** (this will start the server)
+4. enter **_localhost:8080_** in the browser.
 
 ## Instructions on how to develop with this setup
 
