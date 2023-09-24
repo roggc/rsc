@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function HTML({ id, title }) {
+export default function Layout({ id, title }) {
   return (
     <html>
       <head>
