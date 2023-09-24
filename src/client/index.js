@@ -5,7 +5,7 @@ import App from "./components/app";
 import React from "react";
 import theme from "./theme";
 
-createRoot(document.getElementById("myapp")).render(
+createRoot(document.getElementById("app")).render(
   <ThemeProvider theme={theme}>
     <Provider>
       <App />
