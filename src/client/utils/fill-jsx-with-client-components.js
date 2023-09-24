@@ -1,4 +1,4 @@
-export async function fillJSXwithClientComponents(jsx) {
+export async function fillJSXWithClientComponents(jsx) {
   if (
     typeof jsx === "string" ||
     typeof jsx === "number" ||
@@ -10,27 +10,27 @@ export async function fillJSXwithClientComponents(jsx) {
   } else if (Array.isArray(jsx)) {
     // Process each item in an array.
     return Promise.all(
-      jsx.map(async (child) => await fillJSXwithClientComponents(child))
+      jsx.map(async (child) => await fillJSXWithClientComponents(child))
     );
   } else if (typeof jsx === "object") {
     if (jsx.$$typeof === Symbol.for("react.element")) {
       if (jsx.type === Symbol.for("react.fragment")) {
         return {
           ...jsx,
-          props: await fillJSXwithClientComponents(jsx.props),
+          props: await fillJSXWithClientComponents(jsx.props),
         };
       } else if (typeof jsx.type === "string") {
         // This is a component like <div />.
         // Go over its props to make sure they can be turned into JSON.
         return {
           ...jsx,
-          props: await fillJSXwithClientComponents(jsx.props),
+          props: await fillJSXWithClientComponents(jsx.props),
         };
       } else if (typeof jsx.type === "object" && jsx.type.file) {
         return {
           ...jsx,
           type: (await import(jsx.type.file)).default,
-          props: await fillJSXwithClientComponents(jsx.props),
+          props: await fillJSXWithClientComponents(jsx.props),
         };
       } else throw new Error("Not implemented.");
     } else {
@@ -40,7 +40,7 @@ export async function fillJSXwithClientComponents(jsx) {
         await Promise.all(
           Object.entries(jsx).map(async ([propName, value]) => [
             propName,
-            await fillJSXwithClientComponents(value),
+            await fillJSXWithClientComponents(value),
           ])
         )
       );

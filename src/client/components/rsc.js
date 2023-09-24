@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { fillJSXwithClientComponents, parseJSX } from "../utils/index.js";
+import React, { useEffect, useState } from "react";
+import { fillJSXWithClientComponents, parseJSX } from "../utils/index.js";
 
 export default function RSC({
   componentName,
@@ -7,7 +7,7 @@ export default function RSC({
   errorJSX = <>something went wrong</>,
   ...props
 }) {
-  const [JSX, setJSX] = React.useState(children);
+  const [JSX, setJSX] = useState(children);
   const body = JSON.stringify({ props });
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function RSC({
       .then(async (response) => {
         const clientJSXString = await response.text();
         const clientJSX = JSON.parse(clientJSXString, parseJSX);
-        const fixedClientJSX = await fillJSXwithClientComponents(clientJSX);
+        const fixedClientJSX = await fillJSXWithClientComponents(clientJSX);
         setJSX(fixedClientJSX);
       })
       .catch(() => setJSX(errorJSX));

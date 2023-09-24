@@ -11,47 +11,60 @@ This is a setup for development with RSC (React Server Components), without SSR 
 
 ## Instructions on how to develop with this setup
 
-In this setup you first, for example, define an RCC (React Client Component).
+In this setup you first, for example, define an RCC (React Client Component) that needs data from the server.
 
-Then you should define the corresponding RSC to this RCC. Let's say you defined 'SomeComponent' RCC. Then you should define an RSC named 'SomeComponentRSC'.
+Then you should define the corresponding RSC to this RCC. Let's say you defined `Greeting` RCC. Then you should define a `Greeting` RSC.
 
 ```javascript
 // I am a RCC. I am located in the 'src/client/components' folder.
 import React from "react";
 
-export default function SomeComponent({ name }) {
-  return <>hi {name}</>;
+export default function Greeting({ greeting }) {
+  return <>{greeting}</>;
 }
 ```
 
 ```javascript
 // I am a RSC. I am located in the 'src/server/components' folder, and I am async.
 import React from "react";
-import RCC from "./rcc.js";
+import RCC from "./rcc";
 
-export default async function SomeComponentRSC() {
-  const name = await new Promise((r) => setTimeout(() => r("Roger"), 1000));
-  return <RCC __isClient__="../components/some-component.js" name={name} />;
+export default async function Greeting() {
+  const value = Math.random() < 0.5;
+  const greeting = await new Promise((r) =>
+    setTimeout(() => {
+      switch (value) {
+        case true:
+          return r("Whatsupp!!!");
+        case false:
+          return r("How r u doing?");
+      }
+    }, 500)
+  );
+
+  return <RCC greeting={greeting} __isClient__="../components/greeting.js" />;
 }
 ```
 
-Then in the 'Router' RSC you should add the name of the component in the switch statement.
+Then in the `Router` RSC you should add the name of the component in the switch statement.
 
 ```javascript
 // I am a RSC ...
+import React from "react";
+import RCC from "./rcc.js";
+import Greeting from "./greeting.js";
+
 export default async function Router({ url, body: { props } }) {
   switch (url.pathname.slice(1)) {
-    case "home":
-      return <HomeRSC {...props} />;
-    case "some-component":
-      return <SomeComponentRSC {...props} />;
+    case "greeting":
+      return <Greeting {...props} />;
     default:
       return <RCC __isClient__="../components/ups.js" />;
   }
 }
 ```
 
-Finally you should "call" your RSC from a RCC using the 'RSC' RCC.
+Finally you should "call" `Greeting` RSC from a RCC using the `RSC` RCC.
 
 ```javascript
 // I am a RCC
@@ -59,10 +72,11 @@ import React from "react";
 import RSC from "./rsc.js";
 
 export default function SomeRCC() {
+  // ...
   return (
     <>
       {/* ... */}
-      <RSC componentName="some-component">loading ...</RSC>;
+      <RSC componentName="greeting">loading ...</RSC>;{/* ... */}
     </>
   );
 }
@@ -72,11 +86,16 @@ export default function SomeRCC() {
 
 ```javascript
 // I am a RCC. I am located in the 'src/client/components' folder.
-import React, { useEffect } from "react";
-import { fillJSXwithClientComponents, parseJSX } from "../utils/index.js";
+import React, { useEffect, useState } from "react";
+import { fillJSXWithClientComponents, parseJSX } from "../utils/index.js";
 
-export default function RSC({ componentName, children, ...props }) {
-  const [JSX, setJSX] = React.useState(children);
+export default function RSC({
+  componentName,
+  children = <>loading ...</>,
+  errorJSX = <>something went wrong</>,
+  ...props
+}) {
+  const [JSX, setJSX] = useState(children);
   const body = JSON.stringify({ props });
 
   useEffect(() => {
@@ -85,12 +104,14 @@ export default function RSC({ componentName, children, ...props }) {
       method: "post",
       headers: { "content-type": "application/json" },
       body,
-    }).then(async (response) => {
-      const clientJSXString = await response.text();
-      const clientJSX = JSON.parse(clientJSXString, parseJSX);
-      const fixedClientJSX = await fillJSXwithClientComponents(clientJSX);
-      setJSX(fixedClientJSX);
-    });
+    })
+      .then(async (response) => {
+        const clientJSXString = await response.text();
+        const clientJSX = JSON.parse(clientJSXString, parseJSX);
+        const fixedClientJSX = await fillJSXWithClientComponents(clientJSX);
+        setJSX(fixedClientJSX);
+      })
+      .catch(() => setJSX(errorJSX));
   }, [componentName, body]);
 
   return JSX;
@@ -111,6 +132,7 @@ As you can see it does nothing.
 You can pass props to `RSC` RCC:
 
 ```javascript
+// I am a RCC
 export default function SomeRCC() {
   // ...
   return (
@@ -119,15 +141,17 @@ export default function SomeRCC() {
       <RSC componentName="say-hello" name="Roger">
         loading ...
       </RSC>
+      {/* ... */}
     </>
   );
 }
 ```
 
-Then in `SayHelloRSC` you get these props.
+Then in `SayHello` RSC you get these props.
 
 ```javascript
-export default async function SayHelloRSC({ name }) {
+// I am a RSC
+export default async function SayHello({ name }) {
   const greeting = await new Promise((r) =>
     setTimeout(() => {
       switch (name) {
@@ -150,24 +174,22 @@ export default function SayHello({ greeting }) {
 }
 ```
 
-You see how we "called" the `RSC` RCC with a prop `name`, which was used to fetch data on the `SayHelloRSC` RSC, and then this data (`greeting`), was passed as another prop to the call of `RCC` RSC, which in turn ended up in the `SayHello` RCC.
+You see how we "called" the `RSC` RCC with a prop `name`, which was used to fetch data on the `SayHello` RSC, and then this data (`greeting`), was passed as another prop to the call of `RCC` RSC, which in turn ended up in the `SayHello` RCC.
 
 The `Router` RSC will be then:
 
 ```javascript
 export default async function Router({ url, body: { props } }) {
   switch (url.pathname.slice(1)) {
-    case "home":
-      return <HomeRSC {...props} />;
     case "say-hello":
-      return <SayHelloRSC {...props} />;
+      return <SayHello {...props} />;
     default:
       return <RCC __isClient__="../components/ups.js" />;
   }
 }
 ```
 
-The call to `RSC` RCC from any RCC is like a barrier for the flow of props which are functions, because functions cannot be stringified. So in this case use `react-context-slices` to set the function into the global shared state and then recover its value down in the tree of RCC's, bypassing in this way the barrier that `RSC` RCC's are for this type of values (functions).
+The call to `RSC` RCC from any RCC is like a barrier for the flow of props which are functions, because functions cannot be stringified. So in this case use [react-context-slices](https://react-context-slices.github.io/) to set the function into the global shared state and then recover its value down in the tree of RCC's, bypassing in this way the barrier that `RSC` RCC's are for this type of values (functions).
 
 ## React.Suspense not implemented
 
