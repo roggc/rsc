@@ -3,7 +3,7 @@ import { renderToPipeableStream } from "react-dom/server";
 import Router from "./components/router.js";
 import { renderJSXToClientJSX, stringifyJSX } from "./utils/index.js";
 import React from "react";
-import Layout from "../client/components/layout.js";
+import HTML from "./html.js";
 
 const app = express();
 app.use(express.static("public"));
@@ -18,16 +18,13 @@ app.use(async (req, res, next) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
     if (url.pathname === "/") {
-      const { pipe } = renderToPipeableStream(
-        <Layout id="myapp" title=";-)" />,
-        {
-          bootstrapModules: ["src/client/index.js"],
-          onShellReady() {
-            res.setHeader("content-type", "text/html");
-            pipe(res);
-          },
-        }
-      );
+      const { pipe } = renderToPipeableStream(<HTML id="app" title=";-)" />, {
+        bootstrapModules: ["src/client/index.js"],
+        onShellReady() {
+          res.setHeader("content-type", "text/html");
+          pipe(res);
+        },
+      });
     } else {
       const clientJSX = await renderJSXToClientJSX(
         <Router url={url} body={req.body} />
