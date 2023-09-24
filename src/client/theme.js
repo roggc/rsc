@@ -1,5 +1,3 @@
-const theme = {
-  gap: 20,
-};
+const theme = {};
 
 export default theme;
