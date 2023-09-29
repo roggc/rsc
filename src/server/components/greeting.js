@@ -1,5 +1,5 @@
 import React from "react";
-import { RCC } from "../../../rsc/server/components/rcc.js";
+import { RCC } from "rsc-module/server";
 
 export default async function Greeting() {
   const value = Math.random() < 0.5;
