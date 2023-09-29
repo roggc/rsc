@@ -2,6 +2,8 @@
 
 This is a setup for development with RSC (React Server Components), without SSR (Server Side Rendering). Another setup for development with RSC and SSR can be found [here](https://github.com/roggc/rsc-ssr).
 
+A site informing about the setup can be found [here](https://rsc-setup.netlify.app).
+
 ## How to install and run the project.
 
 1. Type **_git clone https://github.com/roggc/rsc.git name_of_your_project_** in your terminal
