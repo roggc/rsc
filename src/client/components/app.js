@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import imgReact from "../assets/react.png";
 import Image from "./image";
-import RSC from "./rsc";
+import { RSC } from "../../../rsc/client/components/rsc.js";
 import { useSlice } from "../slices";
 
 export default function App() {
