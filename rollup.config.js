@@ -9,6 +9,22 @@ import alias from "@rollup/plugin-alias";
 import image from "@rollup/plugin-image";
 
 export default [
+  // {
+  //   input: "rsc/client/components/rsc.js",
+  //   output: {
+  //     format: "es",
+  //     file: "rsc-dist/client.js",
+  //   },
+  //   plugins: [babel({ babelHelpers: "bundled", exclude: "node_modules/**" })],
+  // },
+  // {
+  //   input: "rsc/server/index.js",
+  //   output: {
+  //     format: "es",
+  //     file: "rsc-dist/server.js",
+  //   },
+  //   plugins: [babel({ babelHelpers: "bundled", exclude: "node_modules/**" })],
+  // },
   {
     input: {
       index: "src/server/index.js",
