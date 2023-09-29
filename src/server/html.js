@@ -1,13 +1,13 @@
 import React from "react";
 
-export default function HTML({ id, title }) {
+export default function HTML() {
   return (
     <html>
       <head>
-        <title>{title}</title>
+        <title>My App</title>
       </head>
       <body>
-        <div id={id}></div>
+        <div id="app"></div>
       </body>
     </html>
   );
