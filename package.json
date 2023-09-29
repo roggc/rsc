@@ -28,7 +28,7 @@
     "react": "^18.2.0",
     "react-context-slices": "^9.2.4",
     "react-dom": "^18.2.0",
-    "rsc-module": "^1.0.0",
+    "rsc-module": "^1.0.2",
     "styled-components": "^6.0.8"
   },
   "devDependencies": {
