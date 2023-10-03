@@ -217,3 +217,7 @@ React.Suspense is not implemented in this setup so don't use it (you will get an
 There is a script to eject the project (**_npm run eject_**). This will copy the `src` folder of the `rsc-module` node module into the root of the project and update references in code to point to this new created folder. The project, after `eject`, will run as always, but now you have full control of the source code and can customize it to your specific needs (although this will be more common in the `rsc-ssr` setup than in here).
 
 The `eject` process is reversible. You can delete the folder created and discard changes to the source code. It is recomendable for this reason before eject have all changes commited.
+
+## dotenv ready
+
+You can create an .env file in your project and it will work. You can reference the values defined there in your code by `process.env.value`.
