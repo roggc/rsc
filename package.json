@@ -16,7 +16,7 @@
     "React",
     "React Server Components"
   ],
-  "author": "roger gomez castells (roggc)",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.22.15",
