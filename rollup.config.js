@@ -22,15 +22,13 @@ export default [
     plugins: [babel({ babelHelpers: "bundled", exclude: "node_modules/**" })],
   },
   {
-    input: (await globby("src/client/*.js"))
-      .concat(await globby("src/client/components/*.js"))
-      .reduce(
-        (acc, entryFile) => ({
-          ...acc,
-          [entryFile.replace(".js", "")]: entryFile,
-        }),
-        {}
-      ),
+    input: (await globby("src/client/**/*.js")).reduce(
+      (acc, entryFile) => ({
+        ...acc,
+        [entryFile.replace(".js", "")]: entryFile,
+      }),
+      {}
+    ),
     output: {
       dir: "public",
       format: "es",
