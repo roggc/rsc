@@ -20,7 +20,7 @@ export default function App() {
           get Greeting of the Day (from server)
         </button>
         {count > 0 && (
-          <RSC componentName="greeting" key={count}>
+          <RSC componentName="greeting" softKey={count}>
             loading greeting ...
           </RSC>
         )}
