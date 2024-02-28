@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "styled-components";
-import { Provider } from "./slices";
+import { Provider } from "jotai";
 import App from "./components/app";
 import React from "react";
 import theme from "./theme";
