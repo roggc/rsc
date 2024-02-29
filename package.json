@@ -37,6 +37,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^3.29.4",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-includepaths": "^0.2.4",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rsc-module": "^4.0.2",
     "styled-components": "^6.0.8"

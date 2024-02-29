@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import imgReact from "../assets/react.png";
+import imgReact from "src/client/assets/react.png";
 import Image from "./image";
 import { RSC } from "rsc-module/client";
-import { useAtom } from "../atoms";
+import { useAtom } from "src/client/atoms";
 
 export default function App() {
   const [softKey, setSoftKey] = useState(0);
