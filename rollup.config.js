@@ -7,6 +7,8 @@ import replace from "@rollup/plugin-replace";
 import { globby } from "globby";
 import alias from "@rollup/plugin-alias";
 import image from "@rollup/plugin-image";
+import includePaths from "rollup-plugin-includepaths";
+import del from "rollup-plugin-delete";
 
 export default [
   {
@@ -19,7 +21,11 @@ export default [
       format: "es",
       preserveModules: true,
     },
-    plugins: [babel({ babelHelpers: "bundled", exclude: "node_modules/**" })],
+    plugins: [
+      babel({ babelHelpers: "bundled", exclude: "node_modules/**" }),
+      del({ targets: "dist/*" }),
+      includePaths({ paths: ["./"] }),
+    ],
   },
   {
     input: (await globby("src/client/**/*.js")).reduce(
@@ -56,6 +62,8 @@ export default [
         "process.env.NODE_ENV": JSON.stringify("development"),
       }),
       image(),
+      del({ targets: "public/*" }),
+      includePaths({ paths: ["./"] }),
     ],
     onwarn: function (warning, handler) {
       // Skip certain warnings
